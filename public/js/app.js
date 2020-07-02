@@ -77826,13 +77826,38 @@ var Example = /*#__PURE__*/function (_Component) {
 
   var _super = _createSuper(Example);
 
-  function Example() {
+  function Example(props) {
+    var _this;
+
     _classCallCheck(this, Example);
 
-    return _super.apply(this, arguments);
+    _this = _super.call(this, props);
+    _this.state = {
+      title: "",
+      content: "",
+      posts: {}
+    };
+    _this.handlePostSubmit = _this.handlePostSubmit.bind(_assertThisInitialized(_this));
+    _this.handleChangePostContent = _this.handleChangePostContent.bind(_assertThisInitialized(_this));
+    _this.handleChangeTitle = _this.handleChangeTitle.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(Example, [{
+    key: "handleChangePostContent",
+    value: function handleChangePostContent(event) {
+      this.setState({
+        content: event.target.value
+      });
+    }
+  }, {
+    key: "handleChangeTitle",
+    value: function handleChangeTitle(event) {
+      this.setState({
+        title: event.target.value
+      });
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       var postChannel = Echo.channel("post-event");
@@ -77848,17 +77873,54 @@ var Example = /*#__PURE__*/function (_Component) {
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row justify-content-center"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-8"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-header"
-      }, "Example2  Component"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-body"
-      }, "I'm an example component!")))));
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.handlePostSubmit
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "post_title"
+      }, "Naziv"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        required: true,
+        type: "text",
+        className: "form-control",
+        onChange: this.handleChangeTitle,
+        id: "post_title",
+        name: "title",
+        placeholder: ""
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+        className: "form-control",
+        rows: "6",
+        id: "message",
+        onChange: this.handleChangePostContent,
+        name: "message",
+        maxLength: "140",
+        placeholder: "Post content"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "submit",
+        onClick: this.handlePostSubmit,
+        value: "Add post",
+        color: "primary",
+        className: "btn btn-primary"
+      })));
+    }
+  }, {
+    key: "handlePostSubmit",
+    value: function handlePostSubmit(event) {
+      var _this2 = this;
+
+      event.preventDefault();
+      var form = {
+        title: this.state.title,
+        content: this.state.content
+      };
+      var uri = "".concat(window.siteurl, "/new_post");
+      axios.post(uri, form).then(function (response) {
+        _this2.setState({
+          posts: response.data.postData
+        });
+      })["catch"](function (error) {
+        console.log("error" + error);
+      });
     }
   }]);
 

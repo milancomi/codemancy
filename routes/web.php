@@ -25,3 +25,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/fire', function () {
     broadcast(new PostEvent());
 });
+
+
+Route::get('/getPosts', 'HomeController@getAllPosts')->name('home');
+
+Route::post('/new_post', 'HomeController@addPost')->name('home');
+
+// new_post
