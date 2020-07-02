@@ -17,3 +17,42 @@ $yellow: #ffed4a;
 $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
+
+body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .main-content {
+    background: #ccc;
+    font-family: Arial, sans-serif;
+    padding: 1em;
+  }
+
+  .main-content .blog-post {
+    border-bottom: 1px #666 solid;
+    padding: 1em 0;
+  }
+
+  .main-content .blog-post h1 {
+    margin: 0 0 0.25em 0;
+    padding: 0;
+  }
+
+  .main-content .blog-post p {
+    margin: 0 0 1em 0;
+    padding: 0;
+  }
+
+  .main-content .blog-post a {
+    color: blue;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .main-content .blog-post a:hover,
+  .main-content .blog-post a:focus {
+    color: red;
+    text-decoration: underline;
+  }
+ 

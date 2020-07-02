@@ -1,23 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="reactApp">
 </div>
+<section class="main-content">
+    <article class="blog-post">
+      <h1>10 Reasons to Start Using Compass Today</h1>
+      <p>We all know that CSS is fun, but have you tried writing your CSS with Compass?</p>
+      <a href="#">Read More &raquo;</a>
+    </article>
+
+
+    <article class="blog-post">
+      <h1>Responsive Web Design is Awesome</h1>
+      <p>Make your site look great on any device!</p>
+      <a href="#">Read More &raquo;</a>
+    </article>
+  </section>
+
+
+
 @endsection
+

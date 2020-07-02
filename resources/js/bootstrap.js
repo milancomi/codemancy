@@ -18,6 +18,7 @@ try {
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
+window.siteurl = process.env.MIX_APP_URL_PORT;
 
 window.axios = require('axios');
 
@@ -39,3 +40,18 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+
+import Echo from "laravel-echo"
+
+window.io = require('socket.io-client');
+
+const csrf = document.head.querySelector('meta[name="csrf-token"]').content;
+
+window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: window.location.hostname + ':6001',
+
+});
+
+
