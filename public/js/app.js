@@ -77835,11 +77835,13 @@ var Example = /*#__PURE__*/function (_Component) {
     _this.state = {
       title: "",
       content: "",
-      posts: {}
+      posts: []
     };
     _this.handlePostSubmit = _this.handlePostSubmit.bind(_assertThisInitialized(_this));
     _this.handleChangePostContent = _this.handleChangePostContent.bind(_assertThisInitialized(_this));
     _this.handleChangeTitle = _this.handleChangeTitle.bind(_assertThisInitialized(_this));
+    _this.submitComment = _this.submitComment.bind(_assertThisInitialized(_this));
+    _this.showComments = _this.showComments.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -77858,8 +77860,39 @@ var Example = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
+    key: "showComments",
+    value: function showComments(e) {
+      var field = document.getElementById("comment_field1");
+      var showLessBtn = document.getElementById("showLess1");
+      console.log(showLessBtn);
+
+      if (field.style.display = "none") {
+        e.target.style.display = "none";
+        field.style.display = "none";
+        showLessBtn.style.visibility = "visible";
+      } else {
+        alert("AAA");
+      }
+    }
+  }, {
+    key: "submitComment",
+    value: function submitComment(e) {
+      console.log(e);
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
+      var _this2 = this;
+
+      axios.get("".concat(window.siteurl, "/getPosts")).then(function (response) {
+        console.log(response);
+
+        _this2.setState({
+          posts: response.data
+        });
+      })["catch"](function (error) {
+        console.log("error" + error);
+      });
       var postChannel = Echo.channel("post-event");
       console.log(postChannel);
       postChannel.listen(".post.event", function (data) {
@@ -77871,20 +77904,25 @@ var Example = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "container"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        className: "container bckClr"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "rightSection"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "formHeader"
+      }, "New post"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handlePostSubmit
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        htmlFor: "post_title"
-      }, "Naziv"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         required: true,
         type: "text",
         className: "form-control",
         onChange: this.handleChangeTitle,
         id: "post_title",
         name: "title",
-        placeholder: ""
+        value: this.state.title,
+        placeholder: "Title"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
@@ -77892,21 +77930,55 @@ var Example = /*#__PURE__*/function (_Component) {
         rows: "6",
         id: "message",
         onChange: this.handleChangePostContent,
+        value: this.state.content,
         name: "message",
         maxLength: "140",
-        placeholder: "Post content"
+        placeholder: "Content"
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "submit",
         onClick: this.handlePostSubmit,
         value: "Add post",
         color: "primary",
         className: "btn btn-primary"
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "leftSection"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "New Feed"), this.state.posts.length == 0 ? null : this.state.posts.map(function (posts) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "postDivider",
+          key: posts.id
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
+          className: "main-content"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("article", {
+          className: "blog-post"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, posts.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, posts.content), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          id: "showComent1",
+          onClick: _this3.showComments
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "2"), "\xA0 Read comments \xBB"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          id: "showLess1",
+          style: {
+            visibility: "hidden"
+          }
+        }, "show Less"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          id: "comment_field1"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "kometar jedan")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "form-group"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+          className: "form-control",
+          rows: "2",
+          id: "commentContent",
+          onKeyDown: _this3.submitComment //   onChange={this.handleChangePostContent}
+          ,
+          value: _this3.state.content,
+          name: "commentContent",
+          maxLength: "140",
+          placeholder: "add comment..."
+        })))));
       })));
     }
   }, {
     key: "handlePostSubmit",
     value: function handlePostSubmit(event) {
-      var _this2 = this;
+      var _this4 = this;
 
       event.preventDefault();
       var form = {
@@ -77915,8 +77987,12 @@ var Example = /*#__PURE__*/function (_Component) {
       };
       var uri = "".concat(window.siteurl, "/new_post");
       axios.post(uri, form).then(function (response) {
-        _this2.setState({
-          posts: response.data.postData
+        console.log(response.data);
+
+        _this4.setState({
+          posts: response.data.postData,
+          content: '',
+          title: ""
         });
       })["catch"](function (error) {
         console.log("error" + error);

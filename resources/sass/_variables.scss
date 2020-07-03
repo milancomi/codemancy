@@ -27,6 +27,7 @@ body {
     background: #ccc;
     font-family: Arial, sans-serif;
     padding: 1em;
+    border-radius: 10px;
   }
 
   .main-content .blog-post {
@@ -55,4 +56,34 @@ body {
     color: red;
     text-decoration: underline;
   }
- 
+
+  .leftSection{
+    width: 40%;
+    float:left;
+  }
+
+  .rightSection{
+      border: solid;
+      border-width: thin;
+      border-color: black;
+      padding:2.5em;
+    width: 30%;
+    float:right;
+  }
+
+
+#message{
+    margin-top: 3rem;
+}
+  .formHeader{
+    margin-bottom: 50px;
+  }
+  .formStyle
+  {
+      width: 30%;
+  }
+
+
+.postDivider{
+    margin-top: 2em;
+}

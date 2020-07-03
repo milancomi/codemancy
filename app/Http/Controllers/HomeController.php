@@ -30,7 +30,9 @@ class HomeController extends Controller
 
     public function getAllPosts(){
 
-        return Post::all();
+        $posts = Post::all();
+
+        return response()->json($posts);
 
 }
 
