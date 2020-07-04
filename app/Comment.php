@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     protected $fillable = [
-        'comment_text', 'user_id', 'post_id',
+        'comment_text', 'user_id', 'post_id','user_name'
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime:h:m:s m/d ',
     ];
 
     public function user()

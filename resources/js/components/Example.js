@@ -166,25 +166,33 @@ import { post } from "jquery";
               : this.state.posts.map((posts) => (
                   <div className="postDivider" key={posts.id}>
 <section className="main-content">
+    <h5>{posts.user.name}</h5>
     <article className="blog-post">
-    <h1>{posts.title}</h1>
+    <h1 className="postsTitle">{posts.title}</h1>
       <p>{posts.content}</p>
-      <button id={"showComent" + posts.id}
+      <button className="myBtnClass" id={"showComent" + posts.id}
 data-post-id={posts.id}
   onClick={this.showComments}
 >
+ Read comments &raquo; &nbsp;&nbsp;
+
 {typeof posts.comments[0] !== "undefined" ? `${posts.comments.length}`: 0 }
-    &nbsp; Read comments &raquo;</button>
-<button id={"showLess" + posts.id} data-post-id={posts.id}
+
+    </button>
+<button className="myBtnClass" id={"showLess" + posts.id} data-post-id={posts.id}
 style={{display:"none"}}
-  onClick={this.showComments}>show Less</button>
+  onClick={this.showComments}>hide</button>
 <div id={"comment_field" + posts.id}
 style={{display:"none"}}
 >
 {typeof posts.comments[0] !== "undefined" ? (
 posts.comments.map((comment) => (
-    <div key={comment.id}>
-<p>{comment.comment_text}</p>
+    <div className="commentTextDiv" key={comment.id}>
+<p className="commentBy">by:<b>{comment.user_name}</b></p>
+<p className="commentText">{comment.comment_text}</p>
+<div>
+<p className="commentDate"><i>{comment.created_at}</i></p>
+</div>
 </div>
 ))
 ) : null}
@@ -195,7 +203,7 @@ posts.comments.map((comment) => (
 </div>
       <div className="form-group">
                 <textarea
-                  className="form-control"
+                  className="form-control commentFieldTextArea"
                   rows="2"
                   id={posts.id}
                   onKeyDown={this.submitComment}

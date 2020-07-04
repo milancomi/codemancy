@@ -64,6 +64,7 @@ class HomeController extends Controller
         $new_comment = Comment::create([
             'comment_text'=>$comment_text,
             'post_id'=>$post_id,
+            'user_name'=>Auth::user()->name,
             'user_id'=>$user_id
         ]);
 
