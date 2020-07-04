@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Comment;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,7 @@ class HomeController extends Controller
 
     public function getAllPosts(){
 
-        $posts = Post::all();
+        $posts = Post::with('user','comments')->orderBy('created_at','desc')->get();
 
         return response()->json($posts);
 
@@ -44,8 +45,33 @@ class HomeController extends Controller
             'user_id'=> Auth::user()->id,
           ]);
 
-          $postData =  Post::all();
+          $postData = Post::with('user','comments')->orderBy('created_at','desc')->get();
           return response()->json(["postData"=>$postData]);
+
+    }
+
+
+
+
+
+    public function addComment(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $post_id = $request->post_id;
+        $comment_text = $request->comment_text;
+
+
+        $new_comment = Comment::create([
+            'comment_text'=>$comment_text,
+            'post_id'=>$post_id,
+            'user_id'=>$user_id
+        ]);
+
+        $posts =  Post::with('user','comments')->orderBy('created_at','desc')->get();
+        return response()->json($posts);
+
+
+
 
     }
 }

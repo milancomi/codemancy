@@ -77796,6 +77796,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_2__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -77821,6 +77823,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var Example = /*#__PURE__*/function (_Component) {
   _inherits(Example, _Component);
 
@@ -77835,6 +77838,7 @@ var Example = /*#__PURE__*/function (_Component) {
     _this.state = {
       title: "",
       content: "",
+      commentContent: "",
       posts: []
     };
     _this.handlePostSubmit = _this.handlePostSubmit.bind(_assertThisInitialized(_this));
@@ -77842,6 +77846,7 @@ var Example = /*#__PURE__*/function (_Component) {
     _this.handleChangeTitle = _this.handleChangeTitle.bind(_assertThisInitialized(_this));
     _this.submitComment = _this.submitComment.bind(_assertThisInitialized(_this));
     _this.showComments = _this.showComments.bind(_assertThisInitialized(_this));
+    _this.handleChangeCommentContent = _this.handleChangeCommentContent.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -77860,34 +77865,70 @@ var Example = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
+    key: "handleChangeCommentContent",
+    value: function handleChangeCommentContent(event) {
+      this.setState({
+        commentContent: event.target.value
+      });
+    }
+  }, {
     key: "showComments",
     value: function showComments(e) {
-      var field = document.getElementById("comment_field1");
-      var showLessBtn = document.getElementById("showLess1");
-      console.log(showLessBtn);
+      var post_id = event.target.attributes['data-post-id'].value;
+      var comment_field_id = "comment_field".concat(post_id);
+      var show_less_btn_id = "showLess".concat(post_id);
+      var show_more_btn_id = "showComent".concat(post_id);
+      var field = document.getElementById(comment_field_id);
+      var hiddeBtn = document.getElementById(show_less_btn_id);
+      var showBtn = document.getElementById(show_more_btn_id);
 
-      if (field.style.display = "none") {
-        e.target.style.display = "none";
-        field.style.display = "none";
-        showLessBtn.style.visibility = "visible";
+      if (field.style.display === "none") {
+        showBtn.style.display = "none";
+        field.style.display = "block";
+        hiddeBtn.style.display = "block";
       } else {
-        alert("AAA");
+        showBtn.style.display = "block";
+        field.style.display = "none";
+        hiddeBtn.style.display = "none";
       }
     }
   }, {
     key: "submitComment",
     value: function submitComment(e) {
-      console.log(e);
+      var _this2 = this;
+
+      var post_id = e.target.id;
+
+      if (e.keyCode == 13) {
+        if (e.target.value == "" || !e.target.value.replace(/\s/g, "")) {
+          console.log("empty message");
+        } else {
+          var form = {
+            comment_text: e.target.value,
+            post_id: post_id
+          };
+          var uri = "".concat(window.siteurl, "/new_comment");
+          axios.post(uri, form).then(function (response) {
+            document.getElementById(post_id).value = "";
+
+            _this2.setState({
+              posts: response.data
+            });
+          })["catch"](function (error) {
+            console.log("error" + error);
+          });
+        }
+      }
     }
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("".concat(window.siteurl, "/getPosts")).then(function (response) {
         console.log(response);
 
-        _this2.setState({
+        _this3.setState({
           posts: response.data
         });
       })["catch"](function (error) {
@@ -77904,7 +77945,7 @@ var Example = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container bckClr"
@@ -77950,25 +77991,35 @@ var Example = /*#__PURE__*/function (_Component) {
           className: "main-content"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("article", {
           className: "blog-post"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, posts.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, posts.content), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-          id: "showComent1",
-          onClick: _this3.showComments
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "2"), "\xA0 Read comments \xBB"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-          id: "showLess1",
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, posts.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, posts.content), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          id: "showComent" + posts.id,
+          "data-post-id": posts.id,
+          onClick: _this4.showComments
+        }, typeof posts.comments[0] !== "undefined" ? "".concat(posts.comments.length) : 0, "\xA0 Read comments \xBB"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          id: "showLess" + posts.id,
+          "data-post-id": posts.id,
           style: {
-            visibility: "hidden"
-          }
+            display: "none"
+          },
+          onClick: _this4.showComments
         }, "show Less"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          id: "comment_field1"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "kometar jedan")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          id: "comment_field" + posts.id,
+          style: {
+            display: "none"
+          }
+        }, typeof posts.comments[0] !== "undefined" ? posts.comments.map(function (comment) {
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            key: comment.id
+          }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, comment.comment_text));
+        }) : null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "form-group"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
           className: "form-control",
           rows: "2",
-          id: "commentContent",
-          onKeyDown: _this3.submitComment //   onChange={this.handleChangePostContent}
-          ,
-          value: _this3.state.content,
+          id: posts.id,
+          onKeyDown: _this4.submitComment,
+          onChange: _this4.handleChangeCommentContent,
+          onClick: _this4.handleChangeCommentContent,
           name: "commentContent",
           maxLength: "140",
           placeholder: "add comment..."
@@ -77978,7 +78029,7 @@ var Example = /*#__PURE__*/function (_Component) {
   }, {
     key: "handlePostSubmit",
     value: function handlePostSubmit(event) {
-      var _this4 = this;
+      var _this5 = this;
 
       event.preventDefault();
       var form = {
@@ -77989,7 +78040,7 @@ var Example = /*#__PURE__*/function (_Component) {
       axios.post(uri, form).then(function (response) {
         console.log(response.data);
 
-        _this4.setState({
+        _this5.setState({
           posts: response.data.postData,
           content: '',
           title: ""

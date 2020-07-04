@@ -31,4 +31,5 @@ Route::get('/getPosts', 'HomeController@getAllPosts')->name('home');
 
 Route::post('/new_post', 'HomeController@addPost')->name('home');
 
-// new_post
+Route::post('/new_comment', 'HomeController@addComment')->name('home');
+

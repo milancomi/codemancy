@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from 'react-dom';
+import { post } from "jquery";
 
     export default class Example extends Component {
         constructor(props) {
@@ -7,6 +8,7 @@ import ReactDOM from 'react-dom';
             this.state = {
                 title: "",
                 content: "",
+                commentContent:"",
                 posts:[]
 
             };
@@ -16,6 +18,7 @@ import ReactDOM from 'react-dom';
                 this.handleChangeTitle = this.handleChangeTitle.bind(this);
                 this.submitComment = this.submitComment.bind(this);
                 this.showComments = this.showComments.bind(this);
+                this.handleChangeCommentContent = this.handleChangeCommentContent.bind(this);
 
               }
 
@@ -30,26 +33,66 @@ import ReactDOM from 'react-dom';
               }
 
 
+              handleChangeCommentContent(event) {
+                this.setState({ commentContent: event.target.value });
+              }
+
+
 
               showComments(e){
-                let field = document.getElementById("comment_field1");
-                let showLessBtn = document.getElementById("showLess1");
-                console.log(showLessBtn);
-                if(field.style.display="none"){
-                    e.target.style.display = "none";
-                    field.style.display = "none";
-                    showLessBtn.style.visibility="visible";
+                const post_id=event.target.attributes['data-post-id'].value;
+                let comment_field_id =`comment_field${post_id}`;
+                let show_less_btn_id = `showLess${post_id}`;
+                let show_more_btn_id = `showComent${post_id}`;
+
+                let field = document.getElementById(comment_field_id);
+                let hiddeBtn = document.getElementById(show_less_btn_id);
+                let showBtn = document.getElementById(show_more_btn_id);
+                if(field.style.display==="none"){
+                    showBtn.style.display="none";
+                    field.style.display ="block";
+                    hiddeBtn.style.display="block";
+
 
                 }else{
-                    alert("AAA");
+                    showBtn.style.display="block";
+                    field.style.display ="none";
+                    hiddeBtn.style.display="none";
+
+
                 }
 
 
               }
               submitComment(e) {
+                    let post_id = e.target.id;
+                    if (e.keyCode == 13) {
+                      if (e.target.value == "" || !e.target.value.replace(/\s/g, "")) {
+                        console.log("empty message");
+                      } else {
+                        const form = {
+                            comment_text: e.target.value,
+                          post_id: post_id,
+                        };
 
-console.log(e);
-            }
+                         let uri = `${window.siteurl}/new_comment`;
+
+                        axios
+                          .post(uri,form)
+                          .then((response) => {
+                            document.getElementById(post_id).value="";
+                            this.setState({
+                                posts:response.data
+                            });
+
+                            })
+                          .catch(function(error) {
+                            console.log("error" + error);
+                          });
+                    }
+                  }
+                }
+
 
 
 
@@ -126,20 +169,38 @@ console.log(e);
     <article className="blog-post">
     <h1>{posts.title}</h1>
       <p>{posts.content}</p>
-      <a id="showComent1" onClick={this.showComments}
-><b>2</b>&nbsp; Read comments &raquo;</a>
-<a id="showLess1" style={{visibility:"hidden"}}>show Less</a>
-<div id="comment_field1">
-    <p>kometar jedan</p>
+      <button id={"showComent" + posts.id}
+data-post-id={posts.id}
+  onClick={this.showComments}
+>
+{typeof posts.comments[0] !== "undefined" ? `${posts.comments.length}`: 0 }
+    &nbsp; Read comments &raquo;</button>
+<button id={"showLess" + posts.id} data-post-id={posts.id}
+style={{display:"none"}}
+  onClick={this.showComments}>show Less</button>
+<div id={"comment_field" + posts.id}
+style={{display:"none"}}
+>
+{typeof posts.comments[0] !== "undefined" ? (
+posts.comments.map((comment) => (
+    <div key={comment.id}>
+<p>{comment.comment_text}</p>
+</div>
+))
+) : null}
+
+
+
+
 </div>
       <div className="form-group">
                 <textarea
                   className="form-control"
                   rows="2"
-                  id="commentContent"
+                  id={posts.id}
                   onKeyDown={this.submitComment}
-                //   onChange={this.handleChangePostContent}
-                  value={this.state.content}
+                  onChange={this.handleChangeCommentContent}
+                  onClick={this.handleChangeCommentContent}
                   name="commentContent"
                   maxLength="140"
                   placeholder="add comment..."
