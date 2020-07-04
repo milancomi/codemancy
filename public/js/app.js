@@ -77937,9 +77937,11 @@ var Example = /*#__PURE__*/function (_Component) {
       var postChannel = Echo.channel("post-event");
       console.log(postChannel);
       postChannel.listen(".post.event", function (data) {
-        alert("SASDASD");
-        console.log("test");
-        console.log(data);
+        console.log(data.posts);
+
+        _this3.setState({
+          posts: JSON.parse(data.posts)
+        });
       });
     }
   }, {
@@ -77989,7 +77991,7 @@ var Example = /*#__PURE__*/function (_Component) {
           key: posts.id
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
           className: "main-content"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, posts.user.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("article", {
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, posts.user_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("article", {
           className: "blog-post"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
           className: "postsTitle"
@@ -78034,7 +78036,7 @@ var Example = /*#__PURE__*/function (_Component) {
           name: "commentContent",
           maxLength: "140",
           placeholder: "add comment..."
-        })))));
+        }))), posts.created_at));
       })));
     }
   }, {

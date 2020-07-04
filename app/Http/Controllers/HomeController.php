@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\Events\PostEvent;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,9 +44,16 @@ class HomeController extends Controller
             'title' => $request->title,
             'content' => $request->content,
             'user_id'=> Auth::user()->id,
+            'user_name'=>Auth::user()->name,
           ]);
 
-          $postData = Post::with('user','comments')->orderBy('created_at','desc')->get();
+
+          $postData = Post::with('user')->with('comments')->orderBy('created_at','desc')->get();
+
+          $posts = $postData;
+
+          broadcast(new PostEvent($posts->toJson()))->toOthers();
+
           return response()->json(["postData"=>$postData]);
 
     }
@@ -68,7 +76,10 @@ class HomeController extends Controller
             'user_id'=>$user_id
         ]);
 
+
         $posts =  Post::with('user','comments')->orderBy('created_at','desc')->get();
+        broadcast(new PostEvent($posts->toJson()))->toOthers();
+
         return response()->json($posts);
 
 

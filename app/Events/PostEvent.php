@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Post;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -13,17 +14,18 @@ use Illuminate\Queue\SerializesModels;
 class PostEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+    public $post;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($post)
     {
-        //
-    }
+        $this->post = $post;
 
+    }
     /**
      * Get the channels the event should broadcast on.
      *
@@ -42,7 +44,7 @@ class PostEvent implements ShouldBroadcast
     {
 
         return [
-            'post'=>'tralalal',
+            'posts'=>$this->post->load('user'),
 
         ];
     }

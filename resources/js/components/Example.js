@@ -110,9 +110,13 @@ import { post } from "jquery";
             let postChannel = Echo.channel("post-event");
             console.log(postChannel);
             postChannel.listen(".post.event", (data) => {
-                alert("SASDASD");
-                console.log("test");
-                console.log(data);
+
+
+                console.log(data.posts);
+                this.setState({
+                    posts:JSON.parse(data.posts)
+                });
+
             });
         }
           render() {
@@ -166,7 +170,7 @@ import { post } from "jquery";
               : this.state.posts.map((posts) => (
                   <div className="postDivider" key={posts.id}>
 <section className="main-content">
-    <h5>{posts.user.name}</h5>
+    <h5>{posts.user_name}</h5>
     <article className="blog-post">
     <h1 className="postsTitle">{posts.title}</h1>
       <p>{posts.content}</p>
@@ -215,6 +219,8 @@ posts.comments.map((comment) => (
                 />
               </div>
     </article>
+
+     {posts.created_at}
   </section></div>
                   ))}
 
